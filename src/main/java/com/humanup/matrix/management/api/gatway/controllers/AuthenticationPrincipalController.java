@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 public class AuthenticationPrincipalController {
-    @RequestMapping(value="/hello", method= RequestMethod.GET)
-    String helloUser(@AuthenticationPrincipal OidcUser user) {
-        return "Hello " + user.getAttributes().get("email");
+    @RequestMapping(value="/token/my-account", method= RequestMethod.GET)
+    String helloUser(HttpSession session) {
+        return session.getId() +":"+session.getCreationTime();
     }
 }
