@@ -10,8 +10,8 @@ CREATE TABLE role (
 
 INSERT INTO role (role_title, role_description) VALUES
   ('HR', 'HR Manager'),
-  ('RR', 'Responsible of recruitment');
-  ('ADMIN', 'Administrateur');
+  ('RR', 'Responsible of recruitment'),
+  ('ADMIN', 'Administrator');
 
 
 CREATE TABLE account (
@@ -38,7 +38,11 @@ INSERT INTO account (account_mail_adresse, password,account_first_name, account_
 );
 
 INSERT INTO authorization (authorization_title, authorization_description,authorization_url,role_id) VALUES
-  ('Create person', 'The creation of the person','/authorization',1),
-  ('Find all Authorization', 'Find all Authorization','/authorization/all',2),
-  ('Create role', 'The creation of the role','/role',1),
-  ('Find all roles', 'Find all roles','/role/all',2);
+  ('Create person', 'The creation of the person','/authorization',3),
+  ('Find all Authorization', 'Find all Authorization','/authorization/all',3),
+  ('Create role', 'The creation of the role','/role',3),
+  ('Find all roles', 'Find all roles','/role/all',3),
+  ('Find all persons', 'Find all roles','/persons/all',1),
+  ('Find all persons', 'Find all roles','/persons/all',2),
+  ('Find all persons', 'Find all roles','/persons/all',3);
+

@@ -44,12 +44,12 @@ public class AuthenticationController {
 
         }
         final Account user = userService.findOne(loginUser.getEmail());
-        session.setAttribute("userID",user);
+        session.setAttribute("userID",user.toString());
         final String token = jwtTokenUtil.doGenerateToken(user.getAccountMailAdresse());
         return ResponseEntity.ok(token);
     }
     @RequestMapping(value="/my-account", method= RequestMethod.GET)
     String helloUser(HttpSession session) {
-        return session.getId() +":"+session.getAttribute("userID").toString();
+        return session.getId() +":"+session.getAttribute("userID");
     }
 }

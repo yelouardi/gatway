@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
@@ -15,7 +16,8 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @Entity
-public class Account {
+@ToString(of= {"accountMailAdresse","accountFirstName","accountLastName","role"})
+public class Account implements Serializable {
     @Id
     @Column(unique = true)
     @Email(message = "*Please provide a valid email")

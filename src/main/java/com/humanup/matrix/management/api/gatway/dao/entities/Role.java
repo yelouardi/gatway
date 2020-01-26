@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
@@ -15,7 +16,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "role")
-public class Role {
+@ToString(of= {"roleTitle","roleDescription","authorizationList"})
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

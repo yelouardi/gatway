@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
@@ -13,7 +14,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Authorization {
+@ToString(of= {"authorizationTitle","authorizationDescription","authorizationUrl"})
+public class Authorization implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
      Long authorizationId;

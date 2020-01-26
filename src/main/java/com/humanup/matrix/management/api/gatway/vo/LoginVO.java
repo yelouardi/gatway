@@ -5,13 +5,15 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
 
+import java.io.Serializable;
+
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-public class LoginVO {
+public class LoginVO implements Serializable {
      String email;
      String password;
 }
