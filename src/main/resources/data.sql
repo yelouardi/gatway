@@ -9,8 +9,10 @@ CREATE TABLE role (
 );
 
 INSERT INTO role (role_title, role_description) VALUES
-  ('HR_Manager', 'HR Manager'),
-  ('Recruitment_Responsable', 'Responsible of recruitment');
+  ('HR', 'HR Manager'),
+  ('RR', 'Responsible of recruitment');
+  ('ADMIN', 'Administrateur');
+
 
 CREATE TABLE account (
   account_mail_adresse VARCHAR(250) PRIMARY KEY,
@@ -21,7 +23,7 @@ CREATE TABLE account (
 );
 
 INSERT INTO account (account_mail_adresse, password,account_first_name, account_last_name,role_id) VALUES
-  ('yelouardi@sqli.com','123456','Yassine', 'Elouardi',1),
+  ('yelouardi@sqli.com','123456','Yassine', 'Elouardi',3),
   ('zeljazouli@sqli.com','123456','Zakaria', 'El Jazouli',1),
   ('klabib@sqli.com','123456','Khalid', 'Labib',2),
   ('kkouiss@sqli.com','123456','Khalil', 'Kouiss',2),

@@ -11,14 +11,7 @@ import org.springframework.lang.Nullable;
 @Builder
 @Getter
 @Setter
-@ToString(of= {"accountMailAdresse","password","accountFirstName","accountLastName","accountRole"})
-public class AccountVO {
-     String accountMailAdresse;
+public class LoginVO {
+     String email;
      String password;
-     @JsonIgnore @Nullable
-     String accountFirstName;
-     @JsonIgnore
-     String accountLastName;
-     @JsonIgnore
-     String accountRole;
 }
