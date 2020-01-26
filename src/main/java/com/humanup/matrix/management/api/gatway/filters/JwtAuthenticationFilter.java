@@ -3,12 +3,15 @@ package com.humanup.matrix.management.api.gatway.filters;
 import com.humanup.matrix.management.api.gatway.configuration.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import org.apache.catalina.connector.RequestFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.firewall.FirewalledRequest;
+import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -28,6 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = req.getHeader("Authorization");
         String username = null;
         String authToken = null;
+        boolean userAllowed =false;
+        String path = req.getRequestURI().substring(req.getContextPath().length());
         if (header != null && header.startsWith("Bearer")) {
             authToken = header.replace("Bearer","");
             try {
@@ -46,7 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails =
                     userDetailsService.loadUserByUsername(username);
-            if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+            boolean allowed  = userDetails.getAuthorities().stream()
+                    .filter(a -> a.getAuthority().equals(path))
+                    .findFirst().isPresent();
+            if (allowed && jwtTokenUtil.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new
                         UsernamePasswordAuthenticationToken(userDetails, null, null);
                 authentication.setDetails(new

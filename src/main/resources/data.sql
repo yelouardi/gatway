@@ -38,7 +38,7 @@ INSERT INTO account (account_mail_adresse, password,account_first_name, account_
 );
 
 INSERT INTO authorization (authorization_title, authorization_description,authorization_url,role_id) VALUES
-  ('Create person', 'The creation of the person','/authorization',3),
+  ('Create person', 'The creation of the person','/users/signup',3),
   ('Find all Authorization', 'Find all Authorization','/authorization/all',3),
   ('Create role', 'The creation of the role','/role',3),
   ('Find all roles', 'Find all roles','/role/all',3),

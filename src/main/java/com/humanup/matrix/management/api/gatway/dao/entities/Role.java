@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
@@ -31,4 +33,10 @@ public class Role implements Serializable {
     @OneToMany(mappedBy="role",fetch=FetchType.EAGER)
      List<Authorization> authorizationList;
 
+    public String[] getPathAllowed(){
+        return this.authorizationList.stream()
+                .filter(a -> null!=a)
+                .map(a ->a.getAuthorizationUrl())
+                .collect(Collectors.toList()).toArray(String[]::new);
+    }
 }

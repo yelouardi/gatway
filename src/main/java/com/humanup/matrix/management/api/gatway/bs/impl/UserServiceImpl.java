@@ -3,7 +3,6 @@ package com.humanup.matrix.management.api.gatway.bs.impl;
 import com.humanup.matrix.management.api.gatway.bs.UserService;
 import com.humanup.matrix.management.api.gatway.dao.AccountDAO;
 import com.humanup.matrix.management.api.gatway.dao.entities.Account;
-import com.humanup.matrix.management.api.gatway.dao.entities.Role;
 import com.humanup.matrix.management.api.gatway.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,6 +52,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthority(Account account) {
-        return AuthorityUtils.createAuthorityList(null!=account.getRole()?account.getRole().getRoleTitle():"TEST");
+        return AuthorityUtils.createAuthorityList(account.getRole().getPathAllowed());
     }
 }
