@@ -26,17 +26,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Override
-    public Account save(AccountVO user) {
-        Account newUser = Account.builder()
-        .accountMailAdresse(user.getAccountMailAdresse())
-        .password(passwordEncoder.encode(user.getPassword()))
-        .accountFirstName(user.getAccountFirstName())
-        .accountLastName(user.getAccountLastName())
-                .build();
-        return userDao.save(newUser);
-    }
-
-    @Override
     public Account findOne(String accountMailAdresse) {
         return userDao.findByAccountMailAdresse(accountMailAdresse);
     }
@@ -48,7 +37,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new org.springframework.security.core.userdetails.User(
-                user.getAccountMailAdresse(), user.getPassword(), getAuthority(user));
+                user.getAccountMailAdresse(), passwordEncoder.encode(user.getPassword()), getAuthority(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthority(Account account) {

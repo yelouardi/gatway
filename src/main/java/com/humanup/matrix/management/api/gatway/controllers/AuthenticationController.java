@@ -6,6 +6,7 @@ import com.humanup.matrix.management.api.gatway.dao.entities.Account;
 import com.humanup.matrix.management.api.gatway.vo.LoginVO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,13 +41,14 @@ public class AuthenticationController {
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch(Exception e){
 
-        }
         final Account user = userService.findOne(loginUser.getEmail());
         session.setAttribute("userID",user.toString());
         final String token = jwtTokenUtil.doGenerateToken(user.getAccountMailAdresse());
         return ResponseEntity.ok(token);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Account not Founded");
+        }
     }
     @RequestMapping(value="/my-account", method= RequestMethod.GET)
     String helloUser(HttpSession session) {

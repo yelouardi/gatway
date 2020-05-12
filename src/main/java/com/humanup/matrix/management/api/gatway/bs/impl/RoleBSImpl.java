@@ -1,5 +1,9 @@
 package com.humanup.matrix.management.api.gatway.bs.impl;
+import com.humanup.matrix.management.api.gatway.aop.dto.AuthorizationException;
+import com.humanup.matrix.management.api.gatway.aop.dto.RoleException;
 import com.humanup.matrix.management.api.gatway.bs.RoleBS;
+import com.humanup.matrix.management.api.gatway.bs.impl.sender.RabbitMQAuthorizationSender;
+import com.humanup.matrix.management.api.gatway.bs.impl.sender.RabbitMQRoleSender;
 import com.humanup.matrix.management.api.gatway.dao.RoleDAO;
 import com.humanup.matrix.management.api.gatway.dao.entities.Role;
 import com.humanup.matrix.management.api.gatway.vo.RoleVO;
@@ -17,13 +21,13 @@ public class RoleBSImpl implements RoleBS {
     @Autowired
     private RoleDAO roleDAO;
 
+    @Autowired
+    private RabbitMQRoleSender rabbitMQRoleSender;
     @Override
-    public boolean createRole(RoleVO roleVO) {
-        Role roleToSave = Role.builder()
-                .roleTitle(roleVO.getRoleTitle())
-                .roleDescription(roleVO.getRoleDescription())
-                .build();
-        return  roleDAO.save(roleToSave)!=null;
+    public boolean createRole(RoleVO roleVO) throws RoleException {
+        if (null == roleVO) throw new RoleException();
+        rabbitMQRoleSender.send(roleVO);
+        return true;
     }
 
     @Override

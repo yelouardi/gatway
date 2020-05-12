@@ -23,9 +23,12 @@ public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "role_id")
      Long roleId;
+    @Column(name = "role_title")
      String roleTitle;
-     String roleDescription;
+    @Column(name = "role_description")
+    String roleDescription;
 
     @OneToMany(mappedBy="role",fetch=FetchType.LAZY)
      List<Account> accountList;

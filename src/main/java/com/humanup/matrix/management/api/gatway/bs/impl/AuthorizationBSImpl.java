@@ -1,7 +1,10 @@
 package com.humanup.matrix.management.api.gatway.bs.impl;
 
 
+import com.humanup.matrix.management.api.gatway.aop.dto.AccountException;
+import com.humanup.matrix.management.api.gatway.aop.dto.AuthorizationException;
 import com.humanup.matrix.management.api.gatway.bs.AuthorizationBS;
+import com.humanup.matrix.management.api.gatway.bs.impl.sender.RabbitMQAuthorizationSender;
 import com.humanup.matrix.management.api.gatway.dao.AccountDAO;
 import com.humanup.matrix.management.api.gatway.dao.AuthorizationDAO;
 import com.humanup.matrix.management.api.gatway.dao.RoleDAO;
@@ -27,23 +30,19 @@ public class AuthorizationBSImpl implements AuthorizationBS {
     private AuthorizationDAO authorizationDAO;
 
     @Autowired
-    private RoleDAO roleDAO;
+    private RabbitMQAuthorizationSender rabbitMQAuthorizationSender;
 
     @Autowired
     private AccountDAO accountDAO;
 
-    @Transactional
+    @Transactional(
+            transactionManager = "transactionManagerWrite",
+            rollbackFor = AuthorizationException.class)
     @Override
-    public boolean createAuthorization(AuthorizationVO authorization) {
-        Role role = roleDAO.findByRoleTitle(authorization.getAuthorizationRole());
-        if (null==role) return false;
-        Authorization authorizationToSave = Authorization.builder()
-                .authorizationTitle(authorization.getAuthorizationTitle())
-                .authorizationDescription(authorization.getAuthorizationDescription())
-                .authorizationUrl(authorization.getAuthorizationUrl())
-                .role(role)
-                .build();
-        return  authorizationDAO.save(authorizationToSave)!=null;
+    public boolean createAuthorization(AuthorizationVO authorization) throws AuthorizationException {
+        if (null == authorization) throw new AuthorizationException();
+        rabbitMQAuthorizationSender.send(authorization);
+        return true;
     }
 
     @Override

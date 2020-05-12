@@ -1,5 +1,7 @@
 package com.humanup.matrix.management.api.gatway.controllers;
 
+import com.humanup.matrix.management.api.gatway.aop.dto.AccountException;
+import com.humanup.matrix.management.api.gatway.bs.AccountBS;
 import com.humanup.matrix.management.api.gatway.bs.UserService;
 import com.humanup.matrix.management.api.gatway.dao.entities.Account;
 import com.humanup.matrix.management.api.gatway.vo.AccountVO;
@@ -18,11 +20,11 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private AccountBS accountBS;
     @Operation(summary = "Create Account", description = " Create new Account by firstname, lastname ...", tags = { "account" })
     @PostMapping("/signup")
-    public ResponseEntity saveUser(@RequestBody AccountVO user){
-        Optional<Object> findAccount = Optional.ofNullable(userService.save(user));
+    public ResponseEntity saveUser(@RequestBody AccountVO user) throws AccountException {
+        Optional<Object> findAccount = Optional.ofNullable(accountBS.createAccount(user));
         if(findAccount.isEmpty()){
             return ResponseEntity.status(HttpStatus.FOUND).body("This Account is Founded");
         }

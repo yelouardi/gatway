@@ -15,10 +15,7 @@ import org.springframework.lang.Nullable;
 public class AccountVO {
      String accountMailAdresse;
      String password;
-     @JsonIgnore @Nullable
      String accountFirstName;
-     @JsonIgnore
      String accountLastName;
-     @JsonIgnore
      String accountRole;
 }

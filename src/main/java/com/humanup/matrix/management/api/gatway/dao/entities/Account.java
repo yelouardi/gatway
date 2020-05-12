@@ -16,18 +16,21 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@Table(name = "account")
 @ToString(of= {"accountMailAdresse","accountFirstName","accountLastName","role"})
 public class Account implements Serializable {
     @Id
-    @Column(unique = true)
+    @Column(name = "account_mail_adresse",unique = true)
     @Email(message = "*Please provide a valid email")
     @NotEmpty(message = "*Please provide an email")
      String accountMailAdresse;
     @NotEmpty(message = "*Please provide your password")
      String password;
+    @Column(name = "account_first_name")
      String accountFirstName;
+     @Column(name = "account_last_name")
      String accountLastName;
     @ManyToOne
-    @JoinColumn(name = "roleId")
+    @JoinColumn(name = "role_id")
      Role role;
 }

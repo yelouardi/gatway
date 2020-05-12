@@ -1,13 +1,14 @@
 package com.humanup.matrix.management.api.gatway.bs.impl;
 
+import com.humanup.matrix.management.api.gatway.aop.dto.AccountException;
 import com.humanup.matrix.management.api.gatway.bs.AccountBS;
+import com.humanup.matrix.management.api.gatway.bs.impl.sender.RabbitMQAccountSender;
 import com.humanup.matrix.management.api.gatway.dao.AccountDAO;
-import com.humanup.matrix.management.api.gatway.dao.RoleDAO;
 import com.humanup.matrix.management.api.gatway.dao.entities.Account;
-import com.humanup.matrix.management.api.gatway.dao.entities.Role;
 import com.humanup.matrix.management.api.gatway.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,18 +21,16 @@ public class AccountBSImpl implements AccountBS {
     private AccountDAO accountDAO;
 
     @Autowired
-    private RoleDAO roleDAO;
+    RabbitMQAccountSender rabbitMQAccountSender;
 
     @Override
-    public boolean createAccount(AccountVO accountVO) {
-        Role role = roleDAO.findByRoleTitle(accountVO.getAccountRole());
-        Account accountToSave = Account.builder()
-                .accountMailAdresse(accountVO.getAccountMailAdresse())
-                .accountFirstName(accountVO.getAccountFirstName())
-                .accountLastName(accountVO.getAccountLastName())
-                .role(role)
-                .build();
-        return  accountDAO.save(accountToSave)!=null;
+    @Transactional(
+            transactionManager = "transactionManagerWrite",
+            rollbackFor = AccountException.class)
+    public boolean createAccount(AccountVO accountVO) throws AccountException {
+        if (null == accountVO) throw new AccountException();
+        rabbitMQAccountSender.send(accountVO);
+        return true;
     }
 
     @Override
@@ -39,6 +38,7 @@ public class AccountBSImpl implements AccountBS {
         Optional<Account> accountFinded = Optional.ofNullable(accountDAO.findByAccountLastName(accountLastName));
         if(accountFinded.isPresent()) {
             return  AccountVO.builder()
+                    .password(accountFinded.get().getPassword())
                     .accountMailAdresse(accountFinded.get().getAccountMailAdresse())
                     .accountFirstName(accountFinded.get().getAccountFirstName())
                     .accountLastName(accountFinded.get().getAccountLastName())
@@ -53,6 +53,7 @@ public class AccountBSImpl implements AccountBS {
         Optional<Account> accountFinded = Optional.ofNullable(accountDAO.findByAccountMailAdresse(accountMailAdresse));
         if(accountFinded.isPresent()) {
             return  AccountVO.builder()
+                    .password(accountFinded.get().getPassword())
                     .accountMailAdresse(accountFinded.get().getAccountMailAdresse())
                     .accountFirstName(accountFinded.get().getAccountFirstName())
                     .accountLastName(accountFinded.get().getAccountLastName())
@@ -81,6 +82,7 @@ public class AccountBSImpl implements AccountBS {
         return accountDAO.findByListRolesRoleTitle(roleTitle)
                 .stream()
                 .map(accountFinded ->  AccountVO.builder()
+                        .password(accountFinded.getPassword())
                         .accountMailAdresse(accountFinded.getAccountMailAdresse())
                         .accountFirstName(accountFinded.getAccountFirstName())
                         .accountLastName(accountFinded.getAccountLastName())
