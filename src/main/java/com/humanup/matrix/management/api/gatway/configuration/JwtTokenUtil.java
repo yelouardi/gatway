@@ -20,7 +20,7 @@ public class JwtTokenUtil implements Serializable {
         Claims claims = Jwts.claims().setSubject(subject);
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuer("http://jwtdemo.com")
+                .setIssuer("http://matrix.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() +
                         60*60*1000))
