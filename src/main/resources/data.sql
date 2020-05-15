@@ -31,7 +31,7 @@ INSERT INTO account (account_mail_adresse, password,account_first_name, account_
   ('kladib@sqli.com','123456','Khalid', 'Labib',2),
   ('kkouis@sqli.com','123456','Khalil', 'Kouiss',2),
   ('hbenderouach@sqli.com','123456','Hamza', 'Benderouach',4),
-  ('obellouki@sqli.com','123456','Outhman', 'Bellouki',1),
+  ('obellouki@sqli.com','123456','Outhmane', 'Bellouki',1),
   ('mbeilil@sqli.com','123456','Mohammed', 'Beilil',3);
 
   CREATE TABLE authorization (
@@ -64,6 +64,13 @@ INSERT INTO authorization (authorization_title, authorization_description,author
   ('Find type Events By title', 'Find  type events by title','/api-eventmatrix/typeevents/title',6),
   ('Find type Events By id', 'Find  type events by id','/api-eventmatrix/typesevents/id',6),
   ('Find All Type Events', 'Find all type events','/api-eventmatrix/typeevents/all',6)
-
+  ('Find all courses', 'Find all roles','/api-trainingmatrix/course/all',1),
+  ('Find all course types', 'Find all roles','/api-trainingmatrix/coursetype/all',1),
+  ('Find all interns', 'Find all roles','/api-trainingmatrix/intern/all',1),
+  ('Find all trainers', 'Find all roles','/api-trainingmatrix/trainer/all',6),
+  ('Find all courses', 'Find all roles','/api-trainingmatrix/course/all',6),
+  ('Find all course types', 'Find all roles','/api-trainingmatrix/coursetype/all',6),
+  ('Find all interns', 'Find all roles','/api-trainingmatrix/intern/all',6),
+  ('Find all trainers', 'Find all roles','/api-trainingmatrix/trainer/all',6);
 
 
