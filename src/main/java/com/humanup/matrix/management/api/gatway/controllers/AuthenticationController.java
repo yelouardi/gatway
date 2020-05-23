@@ -45,7 +45,7 @@ public class AuthenticationController {
         final Account user = userService.findOne(loginUser.getEmail());
         session.setAttribute("userID",user.toString());
         final String token = jwtTokenUtil.doGenerateToken(user.getAccountMailAdresse());
-        return ResponseEntity.ok(token);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Account not Founded");
         }
